@@ -41,4 +41,33 @@ class Service {
         
     }
     
+    func fetchPokemonDetails() {
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/1") else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            
+            if let error = error {
+                print("Failed to fetch data with error: ", error.localizedDescription)
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            var result: PokemonDetails?
+            do {
+                result = try JSONDecoder().decode(PokemonDetails.self, from: data)
+            }
+            catch {
+                print("error")
+            }
+            
+            guard let pokemonDetails = result else { return }
+            
+            print(result!.stats[0].baseStat)
+            print(result!.stats[1].baseStat)
+            
+        }.resume()
+        
+    }
+    
 }

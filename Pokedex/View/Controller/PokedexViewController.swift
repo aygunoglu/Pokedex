@@ -17,6 +17,7 @@ class PokedexViewController: UIViewController {
         super.viewDidLoad()
 
         pokedexViewModel.fetchPokemon(page: pokedexViewModel.page)
+        Service.shared.fetchPokemonDetails()
         pokedexViewModel.delegate = self
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -42,7 +43,7 @@ extension PokedexViewController: UICollectionViewDataSource {
 extension PokedexViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 32, left: 8, bottom: 8, right: 8)
+        return UIEdgeInsets(top: 16, left: 8, bottom: 8, right: 8)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -63,6 +64,17 @@ extension PokedexViewController: UICollectionViewDelegate {
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath)
+        
+        let Storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationVC = Storyboard.instantiateViewController(identifier: "StatsViewController") as! StatsViewController
+        
+        self.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+    
+    
 }
 
 extension PokedexViewController: PokedexViewModelDelegate {
@@ -72,3 +84,4 @@ extension PokedexViewController: PokedexViewModelDelegate {
         }
     }
 }
+
