@@ -275,7 +275,16 @@
                     </view>
                     <navigationItem key="navigationItem" id="EkT-ih-7hF"/>
                     <connections>
+                        <outlet property="attackLabel" destination="5sG-Fh-7sQ" id="hrD-3n-yBd"/>
+                        <outlet property="defenceLabel" destination="20R-xm-anw" id="nR2-TI-vBM"/>
+                        <outlet property="healthLabel" destination="MzN-4f-cYm" id="84d-pX-2NP"/>
+                        <outlet property="nameLabel" destination="Akf-0p-qkG" id="mj5-WT-e5M"/>
+                        <outlet property="pokemonImage" destination="BDs-jc-WCt" id="RYO-v9-IPX"/>
                         <outlet property="pokemonView" destination="zwA-R6-hMa" id="2We-bU-Jdp"/>
+                        <outlet property="specialAttackLabel" destination="99o-yn-tlt" id="jtg-A1-O6F"/>
+                        <outlet property="specialDefenceLabel" destination="qgu-jP-DSE" id="7L5-bZ-dTj"/>
+                        <outlet property="speedLabel" destination="TtJ-3H-Lct" id="Ytb-fc-B2U"/>
+                        <outlet property="typeLabel" destination="GBX-5m-614" id="1oA-Yt-3cC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bGm-Go-UpH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

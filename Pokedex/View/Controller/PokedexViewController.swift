@@ -11,13 +11,14 @@ class PokedexViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    
     let pokedexViewModel = PokedexViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         pokedexViewModel.fetchPokemon(page: pokedexViewModel.page)
-        Service.shared.fetchPokemonDetails()
+
         pokedexViewModel.delegate = self
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -70,6 +71,9 @@ extension PokedexViewController: UICollectionViewDelegate {
         
         let Storyboard = UIStoryboard(name: "Main", bundle: nil)
         let destinationVC = Storyboard.instantiateViewController(identifier: "StatsViewController") as! StatsViewController
+        
+        destinationVC.getName = pokedexViewModel.pokemons[indexPath.row].name
+        destinationVC.getURL = pokedexViewModel.pokemons[indexPath.row].url
         
         self.navigationController?.pushViewController(destinationVC, animated: true)
     }

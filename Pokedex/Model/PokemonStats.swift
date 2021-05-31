@@ -7,12 +7,13 @@
 
 import Foundation
 
-struct PokemonDetails: Codable {
+struct PokemonStats: Codable {
     let abilities: [AbilityElement]
     let height: Int
     let stats: [Stat]
     let types: [TypeElement]
     let weight: Int
+    let id: Int
 }
 
 // MARK: - AbilityElement

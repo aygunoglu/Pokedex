@@ -7,9 +7,16 @@
 
 import Foundation
 
+protocol PokemonDetailsDelegate {
+    func didParseJSON(pokemonStats: PokemonStatsModel)
+}
+
 class Service {
     static let shared = Service()
     var pokemonArray = [Pokemon]()
+    var pokemonStats: PokemonStatsModel?
+    var delegate: PokemonDetailsDelegate?
+    
     
     func fetchPokemon(page: Int, completion: @escaping ([Pokemon]) -> ()) {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?offset=\(page)&;amp;limit=48") else { return }
@@ -41,33 +48,34 @@ class Service {
         
     }
     
-    func fetchPokemonDetails() {
-        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon/1") else { return }
+    func fetchPokemonDetails(url: String) {
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            
-            if let error = error {
-                print("Failed to fetch data with error: ", error.localizedDescription)
-                return
-            }
-            
-            guard let data = data else { return }
-            
-            var result: PokemonDetails?
-            do {
-                result = try JSONDecoder().decode(PokemonDetails.self, from: data)
-            }
-            catch {
-                print("error")
-            }
-            
-            guard let pokemonDetails = result else { return }
-            
-            print(result!.stats[0].baseStat)
-            print(result!.stats[1].baseStat)
-            
-        }.resume()
+        if let url = URL(string: url) {
         
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                
+                if let error = error {
+                    print("Failed to fetch data with error: ", error.localizedDescription)
+                    return
+                }
+                
+                guard let data = data else { return }
+                
+                var result: PokemonStats?
+                do {
+                    result = try JSONDecoder().decode(PokemonStats.self, from: data)
+                }
+                catch {
+                    print("error")
+                }
+                
+                guard let finalResult = result else { return }
+                
+                self.pokemonStats = PokemonStatsModel(height: finalResult.height, weight: finalResult.weight, type: finalResult.types[0].type.name, health: finalResult.stats[0].baseStat, attack: finalResult.stats[1].baseStat, defence: finalResult.stats[2].baseStat, SPAttack: finalResult.stats[3].baseStat, SPDefence: finalResult.stats[4].baseStat, speed: finalResult.stats[5].baseStat, id: finalResult.id)
+                self.delegate?.didParseJSON(pokemonStats: self.pokemonStats!)
+                
+            }.resume()
+        }
     }
     
 }
