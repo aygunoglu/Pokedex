@@ -16,7 +16,6 @@ struct PokemonStats: Codable {
     let id: Int
 }
 
-// MARK: - AbilityElement
 struct AbilityElement: Codable {
     let ability: StatClass
     let isHidden: Bool
@@ -29,13 +28,11 @@ struct AbilityElement: Codable {
     }
 }
 
-// MARK: - StatClass
 struct StatClass: Codable {
     let name: String
     let url: String
 }
 
-// MARK: - Stat
 struct Stat: Codable {
     let baseStat, effort: Int
     let stat: StatClass
@@ -46,7 +43,6 @@ struct Stat: Codable {
     }
 }
 
-// MARK: - TypeElement
 struct TypeElement: Codable {
     let slot: Int
     let type: StatClass
