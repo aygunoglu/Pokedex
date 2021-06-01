@@ -8,8 +8,6 @@
 import UIKit
 import Kingfisher
 
-
-
 class StatsViewController: UIViewController {
 
     @IBOutlet weak var pokemonView: UIView!
@@ -23,39 +21,34 @@ class StatsViewController: UIViewController {
     @IBOutlet weak var speedLabel: UILabel!
     @IBOutlet weak var specialDefenceLabel: UILabel!
     
-    //var pokemonDetails: PokemonDetails?
-    
     var getURL = String()
     var getName = String()
     
+    private var statsViewModel = StatsViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pokemonView.layer.cornerRadius = 30
-        
-        Service.shared.delegate = self
-        
-        Service.shared.fetchPokemonDetails(url: getURL)
-
+        statsViewModel.delegate = self
+        statsViewModel.callFuncToGetStatsData(url: getURL)
 
     }
     
 }
 
-extension StatsViewController: PokemonDetailsDelegate {
-    func didParseJSON(pokemonStats: PokemonStatsModel) {
+extension StatsViewController: PokemonStatsDelegate {
+    func didParseJSON(pokemonModel: PokemonStatsModel) {
         DispatchQueue.main.async {
-            self.typeLabel.text = pokemonStats.type.capitalized
+            self.typeLabel.text = pokemonModel.type.capitalized
             self.nameLabel.text = self.getName.capitalized
-            self.attackLabel.text = String(pokemonStats.attack)
-            self.defenceLabel.text = String(pokemonStats.defence)
-            self.healthLabel.text = String(pokemonStats.health)
-            self.specialAttackLabel.text = String(pokemonStats.SPAttack)
-            self.specialDefenceLabel.text = String(pokemonStats.SPDefence)
-            self.speedLabel.text = String(pokemonStats.speed)
-            
-            let url = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(pokemonStats.id).png")
+            self.attackLabel.text = String(pokemonModel.attack)
+            self.defenceLabel.text = String(pokemonModel.defence)
+            self.healthLabel.text = String(pokemonModel.health)
+            self.specialAttackLabel.text = String(pokemonModel.SPAttack)
+            self.specialDefenceLabel.text = String(pokemonModel.SPDefence)
+            self.speedLabel.text = String(pokemonModel.speed)
+            let url = URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(pokemonModel.id).png")
             self.pokemonImage.kf.setImage(with: url)
         }
     }

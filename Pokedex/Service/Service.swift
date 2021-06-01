@@ -7,15 +7,10 @@
 
 import Foundation
 
-protocol PokemonDetailsDelegate {
-    func didParseJSON(pokemonStats: PokemonStatsModel)
-}
-
 class Service {
     static let shared = Service()
     var pokemonArray = [Pokemon]()
     var pokemonStats: PokemonStatsModel?
-    var delegate: PokemonDetailsDelegate?
     
     
     func fetchPokemon(page: Int, completion: @escaping ([Pokemon]) -> ()) {
@@ -48,33 +43,20 @@ class Service {
         
     }
     
-    func fetchPokemonDetails(url: String) {
+    func fetchPokemonStats(url: String ,completion : @escaping (PokemonStats) -> ()){
         
         if let url = URL(string: url) {
         
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                
-                if let error = error {
-                    print("Failed to fetch data with error: ", error.localizedDescription)
-                    return
+            URLSession.shared.dataTask(with: url) { (data, urlResponse, error) in
+                if let data = data {
+                    
+                    let jsonDecoder = JSONDecoder()
+                    
+                    let statsData = try! jsonDecoder.decode(PokemonStats.self, from: data)
+                        completion(statsData)
                 }
-                
-                guard let data = data else { return }
-                
-                var result: PokemonStats?
-                do {
-                    result = try JSONDecoder().decode(PokemonStats.self, from: data)
-                }
-                catch {
-                    print("error")
-                }
-                
-                guard let finalResult = result else { return }
-                
-                self.pokemonStats = PokemonStatsModel(height: finalResult.height, weight: finalResult.weight, type: finalResult.types[0].type.name, health: finalResult.stats[0].baseStat, attack: finalResult.stats[1].baseStat, defence: finalResult.stats[2].baseStat, SPAttack: finalResult.stats[3].baseStat, SPDefence: finalResult.stats[4].baseStat, speed: finalResult.stats[5].baseStat, id: finalResult.id)
-                self.delegate?.didParseJSON(pokemonStats: self.pokemonStats!)
-                
             }.resume()
+            
         }
     }
     
